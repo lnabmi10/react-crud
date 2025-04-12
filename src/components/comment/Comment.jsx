@@ -26,12 +26,7 @@ function Comment() {
             console.log()
         }
     }
-    const handleEditComment = () => {
-        console.log("comment edited")
-    }
-    const handleDeleteComment = () => {
-        console.log("comment Deleted")
-    }
+   
     const handleLikes = () => {
         console.log(" handel likes")
     }
@@ -41,18 +36,42 @@ function Comment() {
     const handleSubmitComment = async (e) => {
     e.preventDefault();
     try {
-      if (editCommentID) {
-        await axios.put(`${API_URL_COMMENTS}/${editCommentID}`, commentFormData);
-      } else {
-        await axios.post(API_URL_COMMENTS, commentFormData);
-      }
-      setCommentFormData({ clientName: '', comment: '' });
-      setEditCommentID(null);
-      fetchAllComment();
-    } catch (err) {
-      console.log('Erreur lors de l\'enregistrement', 'error');
-    }
-  };
+         if (editCommentID) {
+           await axios.put(`${API_URL_COMMENTS}/${editCommentID}`, commentFormData);
+         } else {
+           await axios.post(API_URL_COMMENTS, commentFormData);
+         }
+         setCommentFormData({ clientName: '', comment: '' });
+         setEditCommentID(null);
+         fetchAllComment();
+          } catch (err) {
+         console.log('Erreur lors de l\'enregistrement', 'error');
+        }
+    };
+    const handleEditComment = (comment) => {
+        setCommentFormData({ clientName: comment.clientName, comment: comment.comment });
+        setEditCommentID(comment.id);
+      };
+    
+      const handleDeleteComment = async (id) => {
+        try {
+          await axios.delete(`${API_URL_COMMENTS}/${id}`);
+          fetchAllComment();
+        } catch (err) {
+          console.log('Erreur lors de la suppression', 'error');
+        }
+      };
+    /*
+      const handleLikes = async (id) => {
+        try {
+          const commentToUpdate = allComments.find((comment) => comment.id === id);
+          const updatedComment = { ...commentToUpdate, likes: (commentToUpdate.likes || 0) + 1 };
+          await axios.put(`${API_URL_COMMENTS}/${id}`, updatedComment);
+          fetchAllComment();
+        } catch (err) {
+          console.log('Erreur lors de l\'ajout des likes', 'error');
+        }
+      };*/
 
 
 
